@@ -1,0 +1,64 @@
+name: "Deadlink Sentinel"
+description: "Scan PR-changed Markdown/HTML files for dead links with path/extension filters and browser fallback for JS-rendered pages."
+author: "InnovateToGrow"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  include_paths:
+    description: "Comma-separated list of folder/file path prefixes to include (e.g., docs/, README.md). If empty, include all."
+    required: false
+    default: ""
+  exclude_paths:
+    description: "Comma-separated list of folder/file path prefixes to exclude (e.g., vendor/, node_modules/)."
+    required: false
+    default: ""
+  file_extensions:
+    description: "Comma-separated list of file extensions to scan (e.g., .md,.mdx,.html). If empty, use defaults."
+    required: false
+    default: ".md,.markdown,.mdx,.html,.htm"
+  fail_on_error:
+    description: "Fail the action if dead links are found."
+    required: false
+    default: "true"
+  comment_on_pr:
+    description: "Post a PR comment with dead link findings."
+    required: false
+    default: "true"
+  max_retries:
+    description: "Maximum retries for link checks (requests/browser)."
+    required: false
+    default: "2"
+  timeout_seconds:
+    description: "Timeout in seconds for each link check."
+    required: false
+    default: "20"
+  max_links_per_file:
+    description: "Maximum number of links to process per file."
+    required: false
+    default: "200"
+  exclude_patterns:
+    description: "Regex pattern(s) to exclude specific URLs from checking."
+    required: false
+    default: ""
+  include_internal_links:
+    description: "Check internal links in addition to external links."
+    required: false
+    default: "false"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    INCLUDE_PATHS: ${{ inputs.include_paths }}
+    EXCLUDE_PATHS: ${{ inputs.exclude_paths }}
+    FILE_EXTENSIONS: ${{ inputs.file_extensions }}
+    FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+    COMMENT_ON_PR: ${{ inputs.comment_on_pr }}
+    MAX_RETRIES: ${{ inputs.max_retries }}
+    TIMEOUT_SECONDS: ${{ inputs.timeout_seconds }}
+    MAX_LINKS_PER_FILE: ${{ inputs.max_links_per_file }}
+    EXCLUDE_PATTERNS: ${{ inputs.exclude_patterns }}
+    INCLUDE_INTERNAL_LINKS: ${{ inputs.include_internal_links }}
+
